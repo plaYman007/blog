@@ -1,0 +1,142 @@
+.page {
+  box-sizing: border-box;
+  background-color: #ebeef3;
+  width: 100%;
+  padding-top: 20px;
+  min-height: 900px;
+  padding-bottom: 40px;
+}
+.formWrapper {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px;
+  min-height: 600px;
+  width: 384px;
+  background-color: white;
+  box-shadow: 0px 0px 20px 0px lightgray;
+  padding: 32px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 5px;
+}
+.title {
+  line-height: 28px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+}
+.input {
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  height: 40px;
+  font-size: 16px;
+  padding-left: 12px;
+  max-width: 320px;
+  box-sizing: border-box;
+}
+.inputName {
+  margin-top: 12px;
+  margin-bottom: 2px;
+}
+.blueText {
+  color: #1890ff;
+}
+.formButton {
+  margin-top: 21px;
+  margin-bottom: 8px;
+  width: 100%;
+  height: 40px;
+  border: none;
+  background-color: #1890ff;
+  border-radius: 5px;
+  font-size: 16px;
+  color: white;
+}
+.formButton:hover {
+  background-color: #007aed;
+}
+.signUpText {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  color: #8c8c8c;
+  gap: 2px;
+}
+
+input[type='checkbox'] {
+  display: none;
+
+  &:checked + .checkbox {
+    border: 1px solid #0063c0;
+    box-sizing: border-box;
+  }
+
+  &:checked + .checkbox::before {
+    content: '';
+    background-color: #1890ff;
+    background-image: url(../../pics/icons8-галочка.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    box-sizing: border-box;
+  }
+}
+
+.checkbox {
+  height: 20px;
+  width: 23px;
+  border: 1px solid lightgray;
+  display: flex;
+  position: relative;
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 3px;
+  box-sizing: border-box;
+}
+.checkboxWrapper {
+  border-top: 1px solid lightgray;
+  margin-top: 21px;
+  padding-top: 11px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.link {
+  text-decoration: none;
+  color: inherit;
+  border: none;
+}
+.inputError {
+  border: 1px solid #f5222d;
+}
+.errorText {
+  color: #f5222d;
+  margin-top: 1px;
+  font-size: 14px;
+}
+.disabledButton {
+  background-color: #8c8c8c;
+  cursor: not-allowed;
+}
+.disabledButton:hover {
+  background-color: #8c8c8c;
+}
+.registerError {
+  color: #f5222d;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}

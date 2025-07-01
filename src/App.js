@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Header from './components/Header/Header'
+import ArticleList from './components/ArticleList/ArticleList'
+import { Routes, Route } from 'react-router-dom'
+import ArticlePage from './components/ArticlePage/ArticlePage'
+import SignUpPage from './components/SignUpPage/SignUpPage'
+import SignInPage from './components/SignInPage/SignInPage'
+import ProfilePage from './components/ProfilePage/ProfilePage'
+import { useDispatch } from 'react-redux'
+import { loadUserFromStorage } from './redux/actions/loadUser'
+import { useEffect } from 'react'
+import CreateArticle from './components/CreateArticle/CreateArticle'
+import PrivateRoute from './components/PrivateRoute'
+import EditArticle from './components/EditArticle/EditArticle'
 function App() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(loadUserFromStorage())
+  }, [dispatch])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Header></Header>
+      <Routes>
+        <Route path="/" element={<ArticleList />} />
+        <Route path="/articles" element={<ArticleList />} />
+        <Route path="/articles/:slug" element={<ArticlePage />} />
+        <Route path="/sign-up" element={<SignUpPage />}></Route>
+        <Route path="/sign-in" element={<SignInPage />}></Route>
+        <Route path="/profile" element={<ProfilePage />}></Route>
+        <Route
+          path="/create-article"
+          element={
+            <PrivateRoute>
+              <CreateArticle />
+            </PrivateRoute>
+          }
+        ></Route>
+        <Route
+          path="/articles/:slug/edit"
+          element={
+            <PrivateRoute>
+              <EditArticle />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </>
+  )
 }
 
-export default App;
+export default App

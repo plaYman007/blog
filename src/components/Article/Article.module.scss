@@ -1,0 +1,117 @@
+.Article {
+  width: 918px;
+  height: 140px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  box-sizing: border-box;
+  gap: 20px;
+  padding-left: 0px;
+}
+.Article--shadow {
+  box-shadow: 0px 0px 10px 5px lightgray;
+  width: 938px;
+  padding: 15px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 680px;
+}
+.upline {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 2px;
+}
+.title {
+  line-height: 28px;
+  font-size: 20px;
+  margin: 0;
+  color: #1890ff;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 142px;
+  align-items: end;
+}
+.author {
+  line-height: 28px;
+  font-size: 18px;
+}
+.date {
+  color: #808080;
+}
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  margin-bottom: 30px;
+}
+.profile {
+  display: flex;
+  gap: 12px;
+}
+.authorWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.link {
+  text-decoration: none;
+  color: inherit;
+  border: none;
+}
+.like {
+  border: none;
+  background-color: inherit;
+  background-image: url('../../pics/heart.svg');
+  background-position: center;
+  background-size: 18px;
+  width: 18px;
+  height: 18px;
+  position: relative;
+  left: 4px;
+  top: 1px;
+}
+.likeActive {
+  background-image: url('../../pics/heartRED.svg');
+}
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+.button {
+  font-size: 14px;
+  padding: 6px 17px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: white;
+}
+.buttonDelete {
+  color: #f63e47;
+  border-color: #f63e47;
+}
+.buttonEdit {
+  color: #52c41a;
+  border-color: #52c41a;
+}
+.tagItem {
+  color: #808080;
+  border: 1px solid #808080;
+  padding: 1px 6px 3px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+.tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.description {
+  color: #808080;
+  overflow-wrap: break-word;
+}
