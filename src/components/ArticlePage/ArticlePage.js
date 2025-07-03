@@ -17,6 +17,7 @@ const ArticlePage = () => {
   const article = useSelector((state) => state.articles.currentArticle)
   const loading = useSelector((state) => state.articles.loadingArticle)
   const error = useSelector((state) => state.articles.error)
+  const user = useSelector((state) => state.user.user)
 
   const fixMarkdown = (mdText) =>
     mdText
@@ -32,6 +33,7 @@ const ArticlePage = () => {
   const rawBody = article.body || ''
   const fixedBody = fixMarkdown(rawBody)
   const articleContent = md.render(fixedBody)
+  
   return (
     <div className={styles.page}>
       <div className={styles.content}>
@@ -39,7 +41,7 @@ const ArticlePage = () => {
           article={article}
           isFullPage
           className={styles.Article}
-          isAuthor={article.author.username === article.author.username}
+          isAuthor={user?.username === article.author.username}
         />
         <div
           className={styles.text}

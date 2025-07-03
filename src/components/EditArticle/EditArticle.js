@@ -1,10 +1,14 @@
 import styles from './EditArticle.module.scss'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { getArticleBySlug, updateArticle } from '../../services/articleService'
+
 export default function EditArticle() {
   const { slug } = useParams()
+  const navigate = useNavigate()
+  const token = useSelector((state) => state.user?.user?.token || '')
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -25,145 +29,48 @@ export default function EditArticle() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await fetch(
-          `https://blog-platform.kata.academy/api/articles/${slug}`
-        )
-        const { article } = await response.json()
+        const { article } = await getArticleBySlug(slug, token)
         reset({
           title: article.title,
           description: article.description,
           body: article.body,
-          tagList: article.tagList.length ? article.tagList : [''],
+          tagList: article.tagList.map((tag) => ({ value: tag })),
         })
-        setLoading(false)
       } catch (err) {
-        console.error('Ошибка загрузки статьи:', err)
+        setError('Ошибка загрузки статьи')
+      } finally {
+        setLoading(false)
       }
     }
+
     fetchArticle()
-  }, [slug, reset])
+  }, [slug, token, reset])
 
   const onSubmit = async (data) => {
-    const token = localStorage.getItem('token')
-    const bodyToSend = { article: data }
-    setMessage('')
-    setError('')
+    const tagList = data.tagList.map((tag) => tag.value).filter(Boolean)
+
     try {
-      const response = await fetch(
-        `https://blog-platform.kata.academy/api/articles/${slug}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Token ${token}`,
-          },
-          body: JSON.stringify(bodyToSend),
-        }
-      )
-      await response.json()
-      setMessage('Article edited successfully!')
+      const res = await updateArticle(slug, { ...data, tagList }, token)
+
+      if (res.errors) {
+        const messages = Object.entries(res.errors)
+          .map(([field, msgs]) => `${field}: ${msgs.join(', ')}`)
+          .join('; ')
+        throw new Error(messages)
+      }
+
+      setMessage('Статья успешно обновлена')
+      navigate(`/articles/${slug}`)
     } catch (err) {
-      setError('Network error occurred.')
+      setError(err.message)
     }
   }
 
+  if (loading) return <p>Загрузка...</p>
+
   return (
-    <div className={styles.page}>
-      <div className={styles.formWrapper}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h3 className={styles.title}>Edit article</h3>
-
-          <label>
-            {loading && <p>Loading...</p>}
-            <p className={styles.inputName}>Title</p>
-            <input
-              className={styles.input}
-              placeholder="Title"
-              {...register('title', { required: true })}
-            />
-            {errors.title && <p className={styles.error}>Title is required</p>}
-          </label>
-
-          <label>
-            <p className={styles.inputName}>Short description</p>
-            <input
-              className={styles.input}
-              placeholder="Short description"
-              {...register('description', { required: true })}
-            />
-            {errors.description && (
-              <p className={styles.error}>Description is required</p>
-            )}
-          </label>
-
-          <label>
-            <p className={styles.inputName}>Text</p>
-            <textarea
-              className={styles.textarea}
-              placeholder="Text"
-              {...register('body', { required: true })}
-            />
-            {errors.body && <p className={styles.error}>Text is required</p>}
-          </label>
-
-          <div className={styles.tagsMenu}>
-            <p className={styles.inputName}>Tags</p>
-            {fields.map((field, index) => (
-              <div key={field.id} className={styles.tagCreate}>
-                <input
-                  className={styles.inputTag}
-                  placeholder="Tag"
-                  {...register(`tagList.${index}`, { required: true })}
-                />
-                <button
-                  type="button"
-                  className={`${styles.button} ${styles.buttonDelete}`}
-                  onClick={() => remove(index)}
-                >
-                  Delete
-                </button>
-                {index === fields.length - 1 && (
-                  <button
-                    type="button"
-                    className={`${styles.button} ${styles.buttonAdd}`}
-                    onClick={() => append('')}
-                  >
-                    Add tag
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.buttonWrapper}>
-            <button type="submit" className={styles.formButton}>
-              Send
-            </button>
-            {error && (
-              <p className={`${styles.errorMessage} ${styles.message}`}>
-                {error}
-              </p>
-            )}
-            {message && (
-              <>
-                <p
-                  className={`${styles.successfullyMessage} ${styles.message}`}
-                >
-                  {message}
-                </p>
-                <Link to={'/'}>
-                  <button
-                    type="button"
-                    className={`${styles.formButton} ${styles.goHomeButton}`}
-                  >
-                    Go to home
-                  </button>
-                </Link>
-              </>
-            )}
-          </div>
-        </form>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      {/* Форма редактирования статьи */}
+    </form>
   )
 }

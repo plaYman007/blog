@@ -19,27 +19,18 @@ export default function Header() {
       </Link>
       {!user ? (
         <div className={styles.buttons}>
-          <Link className={styles.link} to={`/sign-in`}>
-            <button type="button" className={styles.button}>
-              Sign In
-            </button>
-          </Link>
-          <Link className={styles.link} to={`/sign-up`}>
-            <button
-              type="button"
-              className={`${styles.button} ${styles.buttonGreen}`}
-            >
-              Sign Up
-            </button>
-          </Link>
+<Link to="/sign-in" className={`${styles.link} ${styles.button}`}>
+  Sign In
+</Link>
+<Link to="/sign-up" className={`${styles.link} ${styles.button} ${styles.buttonGreen}`}>
+  Sign Up
+</Link>
         </div>
       ) : (
         <div className={styles.authButtons}>
-          <Link to="/create-article" className={styles.link}>
-            <button className={`${styles.button} ${styles.buttonCreate}`}>
-              Create Article
-            </button>
-          </Link>
+<Link to="/new-article" className={`${styles.link} ${styles.button} ${styles.buttonCreate}`}>
+  Create Article
+</Link>
           <Link className={styles.link} to={`/profile`}>
             <span>{user.username}</span>
           </Link>

@@ -19,14 +19,15 @@
   font-weight: 500;
   border-radius: 8px;
   transition: 0.3s background-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 .button:hover {
   background-color: aliceblue;
 }
-.buttonGreen {
-  border: 2px solid #52c41a;
-  color: #52c41a;
-}
+
 .buttons {
   display: flex;
   gap: 20px;
@@ -57,10 +58,27 @@
   border-radius: 50%;
 }
 .buttonCreate {
-  width: 112px;
-  font-size: 14px;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 500;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #52c41a;
-  height: 31px;
   color: #52c41a;
-  border-radius: 5px;
+  border-radius: 8px;
+  background-color: white;
+  transition: 0.3s background-color;
+  text-decoration: none;
+}
+
+.buttonCreate:hover {
+  background-color: #f6ffed;
+}
+
+.buttonGreen {
+  border: 2px solid #52c41a;
+  color: #52c41a;
+  align-items: center;
 }

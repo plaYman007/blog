@@ -41,7 +41,8 @@ export default function userReducer(state = initialState, action) {
         ...state,
         user: action.payload,
       }
-
+    case 'CLEAR_USER_ERROR':
+  return { ...state, error: null }
     default:
       return state
   }

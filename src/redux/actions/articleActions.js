@@ -1,22 +1,41 @@
+import { getArticles } from '../../services/articleService'
+import { createArticle as createArticleService } from '../../services/articleService';
+
+export function createArticle(articleData) {
+  return async (dispatch, getState) => {
+    try {
+      const token = getState().user.user?.token || localStorage.getItem('token') // забираем токен из Redux или localStorage
+
+      if (!token) {
+        throw new Error('No auth token found')
+      }
+
+      const response = await createArticleService(articleData, token)
+
+      if (response.errors) {
+        console.error('Ошибки в ответе:', response.errors)
+        throw new Error('Ошибка при создании статьи')
+      }
+
+      dispatch({ type: 'CREATE_ARTICLE_SUCCESS', payload: response.article })
+      return response.article
+    } catch (error) {
+      console.error('Ошибка при создании статьи:', error)
+      throw error
+    }
+  }
+}
 export default function fetchArticles(page) {
   return async function (dispatch) {
     dispatch({ type: 'FETCH_ARTICLES_START' })
 
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(
-        `https://blog-platform.kata.academy/api/articles?limit=5&offset=${(page - 1) * 5}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token && { Authorization: `Token ${token}` }),
-          },
-        }
-      )
+      const data = await getArticles(page, token)
 
-      if (!res.ok) throw new Error('Ошибка при загрузке статей')
-
-      const data = await res.json()
+      if (!data || data.errors) {
+        throw new Error('Ошибка при загрузке статей')
+      }
 
       const articlesWithId = data.articles.map((article, index) => ({
         ...article,
@@ -35,7 +54,6 @@ export default function fetchArticles(page) {
     }
   }
 }
-
 export function fetchArticleBySlug(slug) {
   return async function (dispatch) {
     dispatch({ type: 'FETCH_ARTICLE_START' })

@@ -28,6 +28,12 @@ export default function SignInPage() {
     }
   }, [user, navigate])
 
+  useEffect(() => {
+  return () => {
+    dispatch({ type: 'CLEAR_USER_ERROR' })
+  }
+}, [dispatch])
+
   return (
     <div className={styles.page}>
       <div className={styles.formWrapper}>

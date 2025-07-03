@@ -27,7 +27,7 @@ function App() {
         <Route path="/sign-in" element={<SignInPage />}></Route>
         <Route path="/profile" element={<ProfilePage />}></Route>
         <Route
-          path="/create-article"
+          path="/new-article"
           element={
             <PrivateRoute>
               <CreateArticle />
