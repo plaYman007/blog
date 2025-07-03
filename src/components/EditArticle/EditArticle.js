@@ -1,76 +1,85 @@
-import styles from './EditArticle.module.scss'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useForm, useFieldArray } from 'react-hook-form'
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { getArticleBySlug, updateArticle } from '../../services/articleService'
+import React, { useState } from 'react';
+import styles from './EditArticle.module.scss';
 
-export default function EditArticle() {
-  const { slug } = useParams()
-  const navigate = useNavigate()
-  const token = useSelector((state) => state.user?.user?.token || '')
-  const [loading, setLoading] = useState(true)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
+const EditArticle = () => {
+  const [title, setTitle] = useState('123');
+  const [description, setDescription] = useState('123');
+  const [text, setText] = useState('123');
+  const [tag, setTag] = useState('');
+  const [tags, setTags] = useState(['123']);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm()
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'tagList',
-  })
-
-  useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        const { article } = await getArticleBySlug(slug, token)
-        reset({
-          title: article.title,
-          description: article.description,
-          body: article.body,
-          tagList: article.tagList.map((tag) => ({ value: tag })),
-        })
-      } catch (err) {
-        setError('Ошибка загрузки статьи')
-      } finally {
-        setLoading(false)
-      }
+  const handleAddTag = () => {
+    if (tag.trim() && !tags.includes(tag)) {
+      setTags([...tags, tag]);
+      setTag('');
     }
+  };
 
-    fetchArticle()
-  }, [slug, token, reset])
+  const handleDeleteTag = (tagToDelete) => {
+    setTags(tags.filter(t => t !== tagToDelete));
+  };
 
-  const onSubmit = async (data) => {
-    const tagList = data.tagList.map((tag) => tag.value).filter(Boolean)
-
-    try {
-      const res = await updateArticle(slug, { ...data, tagList }, token)
-
-      if (res.errors) {
-        const messages = Object.entries(res.errors)
-          .map(([field, msgs]) => `${field}: ${msgs.join(', ')}`)
-          .join('; ')
-        throw new Error(messages)
-      }
-
-      setMessage('Статья успешно обновлена')
-      navigate(`/articles/${slug}`)
-    } catch (err) {
-      setError(err.message)
-    }
-  }
-
-  if (loading) return <p>Загрузка...</p>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      {/* Форма редактирования статьи */}
-    </form>
-  )
-}
+    <div className={styles.pageBackground}>
+      <div className={styles.formWrapper}>
+        <h2 className={styles.formTitle}>Edit Article</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            className={styles.input}
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <input
+            className={styles.input}
+            placeholder="Short description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <textarea
+            className={styles.textarea}
+            placeholder="Text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          <div>
+            {tags.map((t) => (
+              <div key={t} className={styles.buttonRow}>
+                <span>{t}</span>
+                <button
+                  type="button"
+                  className={styles.deleteBtn}
+                  onClick={() => handleDeleteTag(t)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className={styles.buttonRow}>
+            <input
+              className={styles.tagInput}
+              placeholder="Enter tag"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+            />
+            <button
+              type="button"
+              className={styles.addTag}
+              onClick={handleAddTag}
+            >
+              Add Tag
+            </button>
+          </div>
+          <button type="submit" className={styles.submitBtn}>Save</button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default EditArticle;

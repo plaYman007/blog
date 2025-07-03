@@ -26,14 +26,13 @@ export default function CreateArticle() {
       tagList: cleanedTags,
     }
 
-    try {
-      await dispatch(createArticle(newArticle)).unwrap()
-      navigate('/articles')
-    } catch (err) {
-      setError('Failed to create article. Please try again.')
-    }
+try {
+  await dispatch(createArticle(newArticle))
+  navigate('/articles')
+} catch (err) {
+  setError('Failed to create article. Please try again.')
+}
   }
-
   const handleTagChange = (index, value) => {
     const newTags = [...tagList]
     newTags[index] = value
